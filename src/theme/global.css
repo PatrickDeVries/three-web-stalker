@@ -1,0 +1,25 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box !important;
+}
+
+html {
+  font-size: 12px;
+  overflow: hidden;
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
+body {
+  margin: 0;
+}
+
+input {
+  font-size: inherit;
+  color: inherit;
+}
+
+p {
+  margin: 0;
+}
