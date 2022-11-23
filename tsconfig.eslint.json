@@ -1,4 +1,4 @@
 {
-  "include": ["src", "vite.config.ts"],
+  "include": ["src", "vite.config.ts", "public/background.js"],
   "extends": "./tsconfig.json"
 }

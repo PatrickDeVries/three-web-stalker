@@ -28,6 +28,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@stylelint/postcss-css-in-js", "virtual:24fb4e8ecebf3d15d5640932e366f76cb018c1712874709fbaa2f0bf24def0730caef77f654c03501861f29d341f871ef7fe70f4acae5f94913b490bdc1aaa28#npm:0.38.0"],\
+            ["@types/chrome", "npm:0.0.202"],\
             ["@types/react", "npm:18.0.25"],\
             ["@types/react-dom", "npm:18.0.9"],\
             ["@types/styled-components", "npm:5.1.26"],\
@@ -2923,6 +2924,45 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@tootallnate-once-npm-2.0.0-e36cf4f140-ad87447820.zip/node_modules/@tootallnate/once/",\
           "packageDependencies": [\
             ["@tootallnate/once", "npm:2.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/chrome", [\
+        ["npm:0.0.202", {\
+          "packageLocation": "./.yarn/cache/@types-chrome-npm-0.0.202-7e380953ed-729f283a3e.zip/node_modules/@types/chrome/",\
+          "packageDependencies": [\
+            ["@types/chrome", "npm:0.0.202"],\
+            ["@types/filesystem", "npm:0.0.32"],\
+            ["@types/har-format", "npm:1.2.9"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/filesystem", [\
+        ["npm:0.0.32", {\
+          "packageLocation": "./.yarn/cache/@types-filesystem-npm-0.0.32-f9e6035fd6-4b9079d200.zip/node_modules/@types/filesystem/",\
+          "packageDependencies": [\
+            ["@types/filesystem", "npm:0.0.32"],\
+            ["@types/filewriter", "npm:0.0.29"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/filewriter", [\
+        ["npm:0.0.29", {\
+          "packageLocation": "./.yarn/cache/@types-filewriter-npm-0.0.29-08151cd903-0c58aa875c.zip/node_modules/@types/filewriter/",\
+          "packageDependencies": [\
+            ["@types/filewriter", "npm:0.0.29"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/har-format", [\
+        ["npm:1.2.9", {\
+          "packageLocation": "./.yarn/cache/@types-har-format-npm-1.2.9-63726cb086-61fbcfa402.zip/node_modules/@types/har-format/",\
+          "packageDependencies": [\
+            ["@types/har-format", "npm:1.2.9"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8047,6 +8087,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["three-web-stalker", "workspace:."],\
             ["@stylelint/postcss-css-in-js", "virtual:24fb4e8ecebf3d15d5640932e366f76cb018c1712874709fbaa2f0bf24def0730caef77f654c03501861f29d341f871ef7fe70f4acae5f94913b490bdc1aaa28#npm:0.38.0"],\
+            ["@types/chrome", "npm:0.0.202"],\
             ["@types/react", "npm:18.0.25"],\
             ["@types/react-dom", "npm:18.0.9"],\
             ["@types/styled-components", "npm:5.1.26"],\
