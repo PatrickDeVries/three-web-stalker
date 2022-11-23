@@ -1,37 +1,48 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-export const Pill = styled.label<{ active: boolean }>`
+export const Wrapper = styled.div`
   flex: 1;
-  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+`
+
+export const Pill = styled.label`
+  flex: 1;
+  padding: 0.5em 1em;
 
   display: flex;
   justify-content: center;
-
-  font-size: calc(4rem / 3);
+  align-items: center;
 
   background-color: ${({ theme }) => theme.color.background};
   border: 1px solid ${({ theme }) => theme.color.text};
 
-  ${({ theme, active }) =>
-    active &&
-    css`
-      border-color: ${theme.color.focus};
-      color: ${theme.color.focus};
-    `}
+  &[data-active='true'] {
+    border-color: ${({ theme }) => theme.color.focus};
+    color: ${({ theme }) => theme.color.focus};
+  }
 
   cursor: pointer;
-`
-export const HiddenRadio = styled.input`
-  display: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `
 
-export const Wrapper = styled.fieldset`
+export const Pillbox = styled.fieldset`
   all: unset;
+  flex: 1;
 
   display: flex;
 
   ${Pill}:not(:first-child) {
     border-left: 1px solid ${({ theme }) => theme.color.text};
+  }
+
+  ${Pill}[data-active='true'] {
+    border-left: 1px solid ${({ theme }) => theme.color.focus};
   }
 
   ${Pill}:first-child {
@@ -43,4 +54,8 @@ export const Wrapper = styled.fieldset`
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
   }
+`
+
+export const HiddenRadio = styled.input`
+  display: none;
 `

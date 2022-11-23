@@ -1,15 +1,17 @@
 import React, { InputHTMLAttributes } from 'react'
-import { StyledInput, StyledLabel } from './style'
+import { Error, StyledInput, StyledLabel } from './style'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
+  error?: string | null
 }
 
-const Input: React.FC<Props> = ({ label, ...props }) => {
+const Input: React.FC<Props> = ({ label, error, ...props }) => {
   return (
     <StyledLabel>
       {label && label}
-      <StyledInput {...props} />
+      <StyledInput error={!!error} {...props} />
+      {error && <Error>{error}</Error>}
     </StyledLabel>
   )
 }

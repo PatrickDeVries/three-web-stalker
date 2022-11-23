@@ -6,5 +6,9 @@ export const Global = createGlobalStyle`
       color: ${theme.color.text};
       background-color: ${theme.color.background};
     }
+
+    a {
+      color: ${theme.color.focus};
+    }
   `}
 `
