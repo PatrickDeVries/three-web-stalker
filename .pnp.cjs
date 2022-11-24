@@ -52,6 +52,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["stylelint-config-styled-components", "npm:0.1.1"],\
             ["stylelint-processor-styled-components", "npm:1.10.0"],\
             ["typescript", "patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=d73830"],\
+            ["valtio", "virtual:24fb4e8ecebf3d15d5640932e366f76cb018c1712874709fbaa2f0bf24def0730caef77f654c03501861f29d341f871ef7fe70f4acae5f94913b490bdc1aaa28#npm:1.7.6"],\
             ["vite", "virtual:24fb4e8ecebf3d15d5640932e366f76cb018c1712874709fbaa2f0bf24def0730caef77f654c03501861f29d341f871ef7fe70f4acae5f94913b490bdc1aaa28#npm:3.2.4"]\
           ],\
           "linkType": "SOFT"\
@@ -7063,6 +7064,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["proxy-compare", [\
+        ["npm:2.3.0", {\
+          "packageLocation": "./.yarn/cache/proxy-compare-npm-2.3.0-8d4771422e-7136ec8ee7.zip/node_modules/proxy-compare/",\
+          "packageDependencies": [\
+            ["proxy-compare", "npm:2.3.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["punycode", [\
         ["npm:2.1.1", {\
           "packageLocation": "./.yarn/cache/punycode-npm-2.1.1-26eb3e15cf-823bf443c6.zip/node_modules/punycode/",\
@@ -8130,6 +8140,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["stylelint-config-styled-components", "npm:0.1.1"],\
             ["stylelint-processor-styled-components", "npm:1.10.0"],\
             ["typescript", "patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=d73830"],\
+            ["valtio", "virtual:24fb4e8ecebf3d15d5640932e366f76cb018c1712874709fbaa2f0bf24def0730caef77f654c03501861f29d341f871ef7fe70f4acae5f94913b490bdc1aaa28#npm:1.7.6"],\
             ["vite", "virtual:24fb4e8ecebf3d15d5640932e366f76cb018c1712874709fbaa2f0bf24def0730caef77f654c03501861f29d341f871ef7fe70f4acae5f94913b490bdc1aaa28#npm:3.2.4"]\
           ],\
           "linkType": "SOFT"\
@@ -8376,6 +8387,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["use-sync-external-store", [\
+        ["npm:1.2.0", {\
+          "packageLocation": "./.yarn/cache/use-sync-external-store-npm-1.2.0-44f75d2564-5c639e0f8d.zip/node_modules/use-sync-external-store/",\
+          "packageDependencies": [\
+            ["use-sync-external-store", "npm:1.2.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:2bdd1a261c00354e6180289a62558620961c691c8953edf8d569d875fc295021c834fefa35a58a810613e558fb4dba02907ca70caa9cb50844f4ff16ced392db#npm:1.2.0", {\
+          "packageLocation": "./.yarn/__virtual__/use-sync-external-store-virtual-7bc3701215/0/cache/use-sync-external-store-npm-1.2.0-44f75d2564-5c639e0f8d.zip/node_modules/use-sync-external-store/",\
+          "packageDependencies": [\
+            ["use-sync-external-store", "virtual:2bdd1a261c00354e6180289a62558620961c691c8953edf8d569d875fc295021c834fefa35a58a810613e558fb4dba02907ca70caa9cb50844f4ff16ced392db#npm:1.2.0"],\
+            ["@types/react", "npm:18.0.25"],\
+            ["react", "npm:18.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["util-deprecate", [\
         ["npm:1.0.2", {\
           "packageLocation": "./.yarn/cache/util-deprecate-npm-1.0.2-e3fe1a219c-474acf1146.zip/node_modules/util-deprecate/",\
@@ -8401,6 +8434,50 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["validate-npm-package-license", "npm:3.0.4"],\
             ["spdx-correct", "npm:3.1.1"],\
             ["spdx-expression-parse", "npm:3.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["valtio", [\
+        ["npm:1.7.6", {\
+          "packageLocation": "./.yarn/cache/valtio-npm-1.7.6-be8e9ca68e-2e2b0ce372.zip/node_modules/valtio/",\
+          "packageDependencies": [\
+            ["valtio", "npm:1.7.6"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:24fb4e8ecebf3d15d5640932e366f76cb018c1712874709fbaa2f0bf24def0730caef77f654c03501861f29d341f871ef7fe70f4acae5f94913b490bdc1aaa28#npm:1.7.6", {\
+          "packageLocation": "./.yarn/__virtual__/valtio-virtual-2bdd1a261c/0/cache/valtio-npm-1.7.6-be8e9ca68e-2e2b0ce372.zip/node_modules/valtio/",\
+          "packageDependencies": [\
+            ["valtio", "virtual:24fb4e8ecebf3d15d5640932e366f76cb018c1712874709fbaa2f0bf24def0730caef77f654c03501861f29d341f871ef7fe70f4acae5f94913b490bdc1aaa28#npm:1.7.6"],\
+            ["@babel/helper-module-imports", null],\
+            ["@babel/types", null],\
+            ["@types/aslemammad-vite-plugin-macro", null],\
+            ["@types/babel-plugin-macros", null],\
+            ["@types/babel__helper-module-imports", null],\
+            ["@types/babel__types", null],\
+            ["@types/react", "npm:18.0.25"],\
+            ["@types/vite", null],\
+            ["aslemammad-vite-plugin-macro", null],\
+            ["babel-plugin-macros", null],\
+            ["proxy-compare", "npm:2.3.0"],\
+            ["react", "npm:18.2.0"],\
+            ["use-sync-external-store", "virtual:2bdd1a261c00354e6180289a62558620961c691c8953edf8d569d875fc295021c834fefa35a58a810613e558fb4dba02907ca70caa9cb50844f4ff16ced392db#npm:1.2.0"],\
+            ["vite", "virtual:24fb4e8ecebf3d15d5640932e366f76cb018c1712874709fbaa2f0bf24def0730caef77f654c03501861f29d341f871ef7fe70f4acae5f94913b490bdc1aaa28#npm:3.2.4"]\
+          ],\
+          "packagePeers": [\
+            "@babel/helper-module-imports",\
+            "@babel/types",\
+            "@types/aslemammad-vite-plugin-macro",\
+            "@types/babel-plugin-macros",\
+            "@types/babel__helper-module-imports",\
+            "@types/babel__types",\
+            "@types/react",\
+            "@types/vite",\
+            "aslemammad-vite-plugin-macro",\
+            "babel-plugin-macros",\
+            "react",\
+            "vite"\
           ],\
           "linkType": "HARD"\
         }]\

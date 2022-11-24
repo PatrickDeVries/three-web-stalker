@@ -17,7 +17,8 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "valtio": "^1.7.6"
   },
   "devDependencies": {
     "@stylelint/postcss-css-in-js": "^0.38.0",

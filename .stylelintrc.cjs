@@ -11,5 +11,6 @@ module.exports = {
     'no-descending-specificity': null,
     'keyframes-name-pattern': null,
     'declaration-block-semicolon-newline-after': null,
+    'rule-empty-line-before': null
   },
 }

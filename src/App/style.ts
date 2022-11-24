@@ -1,6 +1,24 @@
 import styled from 'styled-components'
 
 export const Main = styled.main`
+  height: 100vh;
+  width: 100vw;
+
+  overflow: hidden;
+`
+
+export const Content = styled.div`
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  overflow-y: auto;
+`
+
+export const Wrapper = styled.div`
   margin: 0 auto;
   padding: 2rem;
 
