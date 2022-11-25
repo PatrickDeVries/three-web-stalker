@@ -5,7 +5,8 @@ import { URL_TEST_REGEX } from '../common/constants'
 import Input from '../common/Input'
 import Pills from '../common/Pills'
 import { buildGraph } from './Graph'
-import { graph } from './Graph/store'
+import Graph from './Graph/Graph'
+import { store } from './Graph/store'
 import { Configuration, Content, Main, Section, Wrapper } from './style'
 
 const isURLValid = (value: string): boolean => {
@@ -16,15 +17,13 @@ const App: React.FC = () => {
   const [mode, setMode] = useState<'search' | 'url'>('search')
   const [baseSite, setBaseSite] = useState<string | null>(null)
   const [search, setSearch] = useState<string>('')
-  const [maxDepth, setMaxDepth] = useState<string>('2')
-  const graphSnap = useSnapshot(graph)
+  const [maxDepth, setMaxDepth] = useState<string>('1')
+  const { graph } = useSnapshot(store)
 
   const searchUrl = useMemo(
     () => `http://google.com/search?${new URLSearchParams({ q: search })}`,
     [search],
   )
-
-  console.log('current graph', graphSnap)
 
   return (
     <Main>
@@ -81,13 +80,15 @@ const App: React.FC = () => {
             </h3>
           </Section>
           <Button
-            onClick={() =>
+            onClick={() => {
+              store.graph = {}
               buildGraph(mode === 'url' ? baseSite ?? '' : searchUrl, parseInt(maxDepth, 10))
-            }
+            }}
           >
-            Get it
+            BuildGraph
           </Button>
-          <p>{Object.keys(graphSnap).join(' | ')}</p>
+          <p>{Object.keys(graph).join(' | ')}</p>
+          <Graph rootURL={mode === 'url' ? baseSite ?? '' : searchUrl} />
         </Wrapper>
       </Content>
     </Main>

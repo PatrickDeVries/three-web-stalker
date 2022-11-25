@@ -1,4 +1,4 @@
 import { proxy } from 'valtio'
-import { Graph } from './types'
+import { GraphStore } from './types'
 
-export const graph = proxy<Graph>({})
+export const store = proxy<GraphStore>({ graph: {} })

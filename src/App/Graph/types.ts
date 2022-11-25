@@ -7,3 +7,7 @@ export interface Node {
 }
 
 export type Graph = Record<string, Node> // URL to node
+
+export interface GraphStore {
+  graph: Graph
+}

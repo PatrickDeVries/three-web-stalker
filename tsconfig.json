@@ -16,6 +16,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "dist/background.ts"],
+  "include": ["src", "dist/background.ts", "react-three-fiber.d.ts", "declarations.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

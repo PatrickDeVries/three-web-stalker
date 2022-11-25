@@ -15,9 +15,12 @@
     "lint": "yarn lint:code && yarn lint:styles && yarn lint:formatting && yarn lint:types"
   },
   "dependencies": {
+    "@react-three/fiber": "^8.9.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "styled-components": "^5.3.6",
+    "three": "^0.146.0",
+    "three.meshline": "^1.4.0",
     "valtio": "^1.7.6"
   },
   "devDependencies": {
@@ -26,6 +29,7 @@
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "@types/styled-components": "^5.1.26",
+    "@types/three": "^0.146.0",
     "@typescript-eslint/parser": "^5.44.0",
     "@vitejs/plugin-react": "^2.2.0",
     "babel-plugin-styled-components": "^2.0.7",

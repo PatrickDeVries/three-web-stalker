@@ -6,6 +6,7 @@ const theme: DefaultTheme = {
     focus: '#00FFFF',
     error: '#DB8A7B',
     background: '#000000',
+    backgroundHighlight: '#130C36',
   },
 }
 
