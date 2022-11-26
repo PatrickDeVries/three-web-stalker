@@ -1,6 +1,6 @@
 import { URL_MATCH_REGEX } from '../../common/constants'
-import { NODE_RADIUS, PAGE } from './constants'
-import { store } from './store'
+import { PAGE } from './constants'
+import { store } from './store/store'
 import { Graph } from './types'
 
 const addToGraph = (newNodes: Graph) =>
@@ -38,7 +38,7 @@ const getPage = async (url: string): Promise<string> => {
 
 // get list of links from a url
 const getURLS = async (url: string): Promise<string[]> => {
-  const page = PAGE //await getPage(url)
+  const page = PAGE // await getPage(url)
   return [...page.matchAll(URL_MATCH_REGEX)].map(match => {
     const trimmed = match[1].trim()
     if (trimmed.endsWith('/')) return trimmed.slice(0, -1)
@@ -56,15 +56,15 @@ const buildInnerGraph = async (
 ) => {
   const prevNode = store.graph[parentURL]
 
-  const d = NODE_RADIUS * childCount * 1.25 // line scale factor
+  const d = childCount * 4 // line scale factor
 
   let angle = childIndex * ((Math.PI * 2) / childCount)
   addToGraph({
     [baseURL]: {
       label: baseURL,
-      x: NODE_RADIUS * d * Math.cos(angle) + prevNode.x,
-      y: NODE_RADIUS * d * Math.sin(angle) + prevNode.y,
-      z: prevNode.z - depth * 10,
+      x: d * Math.cos(angle) + prevNode.x,
+      y: d * Math.sin(angle) + prevNode.y,
+      z: prevNode.z - d,
       connections: new Set<string>([parentURL]),
     },
   })

@@ -3,12 +3,12 @@ import { createGlobalStyle, css } from 'styled-components'
 export const Global = createGlobalStyle`
   ${({ theme }) => css`
     html {
-      color: ${theme.color.text};
+      color: ${theme.color.primary};
       background-color: ${theme.color.background};
     }
 
     a {
-      color: ${theme.color.focus};
+      color: ${theme.color.secondary};
     }
   `}
 `

@@ -12,12 +12,12 @@ export const StyledInput = styled.input<{ error: boolean }>`
   outline: none;
   padding: 0.5em 1em;
 
-  border: 1px solid ${({ theme, error }) => (error ? theme.color.error : theme.color.text)};
-  color: ${({ theme }) => theme.color.text};
+  border: 1px solid ${({ theme, error }) => (error ? theme.color.error : theme.color.primary)};
+  color: ${({ theme }) => theme.color.primary};
   background-color: ${({ theme }) => theme.color.background};
 
   &:focus {
-    border-color: ${({ theme }) => theme.color.focus};
+    border-color: ${({ theme }) => theme.color.secondary};
   }
 `
 

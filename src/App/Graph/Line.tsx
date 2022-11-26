@@ -23,7 +23,6 @@ const Line: React.FC<Props> = ({ start, end }) => {
         [start, end].map(point => new Vector3(point.x, point.y, point.z)),
       )
       ref.current.geometry.setGeometry(geometry)
-      console.log(ref.current.material)
     }
   }, [start, end])
 
@@ -32,13 +31,12 @@ const Line: React.FC<Props> = ({ start, end }) => {
       <meshLine attach="geometry" />
       <meshLineMaterial
         attach="material"
-        color={new Color(theme.color.focus)}
-        // linecap="round"
+        color={new Color(theme.color.secondary90)}
+        linecap="round"
         linewidth={1}
         // transparent
-        opacity={0.5}
-        sizeAttenuation
-        // depthTest={false}
+        // opacity={0.25}
+        // alphaTest={0.25}
       />
     </mesh>
   )

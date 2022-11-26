@@ -17,11 +17,11 @@ export const Pill = styled.label`
   align-items: center;
 
   background-color: ${({ theme }) => theme.color.background};
-  border: 1px solid ${({ theme }) => theme.color.text};
+  border: 1px solid ${({ theme }) => theme.color.primary};
 
   &[data-active='true'] {
-    border-color: ${({ theme }) => theme.color.focus};
-    color: ${({ theme }) => theme.color.focus};
+    border-color: ${({ theme }) => theme.color.secondary};
+    color: ${({ theme }) => theme.color.secondary};
   }
 
   cursor: pointer;
@@ -38,11 +38,11 @@ export const Pillbox = styled.fieldset`
   display: flex;
 
   ${Pill}:not(:first-child) {
-    border-left: 1px solid ${({ theme }) => theme.color.text};
+    border-left: 1px solid ${({ theme }) => theme.color.primary};
   }
 
   ${Pill}[data-active='true'] {
-    border-left: 1px solid ${({ theme }) => theme.color.focus};
+    border-left: 1px solid ${({ theme }) => theme.color.secondary};
   }
 
   ${Pill}:first-child {

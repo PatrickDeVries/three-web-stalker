@@ -48,3 +48,17 @@ export const Configuration = styled.div`
     flex: 0 1 auto;
   }
 `
+
+export const List = styled.div`
+  max-height: 10rem;
+  min-height: 10rem;
+
+  padding: 0.5rem 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  border: 1px solid ${({ theme }) => theme.color.primary};
+  overflow-y: auto;
+`

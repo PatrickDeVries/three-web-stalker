@@ -6,4 +6,7 @@ export const Wrapper = styled.div`
 
   min-height: 80vh;
   min-width: 80vw;
+
+  border: 1px solid ${({ theme }) => theme.color.primary};
+  background-color: ${({ theme }) => theme.color.background50};
 `

@@ -1686,6 +1686,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pmndrs/cannon-worker-api@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "@pmndrs/cannon-worker-api@npm:2.3.0"
+  peerDependencies:
+    three: ">=0.139"
+  checksum: edd3e497c6dbec4e2189aecfe3ce23ce31debecb555246855ed2142feefb03ab467916bd6bcfbbdd3d1ad2d317fd3b343e1202f6670ebb2930041e1ce039b69d
+  languageName: node
+  linkType: hard
+
+"@react-three/cannon@npm:^6.5.0":
+  version: 6.5.0
+  resolution: "@react-three/cannon@npm:6.5.0"
+  dependencies:
+    "@pmndrs/cannon-worker-api": ^2.3.0
+    cannon-es: ^0.20.0
+    cannon-es-debugger: ^1.0.0
+  peerDependencies:
+    "@react-three/fiber": ">=8"
+    react: ">=18"
+    three: ">=0.139"
+  checksum: 56ac6ec8e247f813e5335437ea4fccbb642d5cb276575756fb03dec8a9c4389d02942f9499a9c79484d01f07ceadee829e1cbaca37f11593311d4784c5b3d51e
+  languageName: node
+  linkType: hard
+
 "@react-three/fiber@npm:^8.9.1":
   version: 8.9.1
   resolution: "@react-three/fiber@npm:8.9.1"
@@ -2517,6 +2541,27 @@ __metadata:
   version: 1.0.30001434
   resolution: "caniuse-lite@npm:1.0.30001434"
   checksum: 7c9d2641e8e8f3ddf9af14c4ce47266a9d8fd1fc0243626049ff1b2eca4bf02938ff440813cc3feae3fa8d851ec8d1b9718044340c8d09bb4372d92d4f6b519c
+  languageName: node
+  linkType: hard
+
+"cannon-es-debugger@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "cannon-es-debugger@npm:1.0.0"
+  peerDependencies:
+    cannon-es: 0.x
+    three: 0.x
+    typescript: ">=3.8"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 4d50b1250db46e5f7f005980ba38bcb5b21682c8851bef7e6077a1c20c7490ed05dcd286ca36f47cb7c5f9de47ff77b633c18c49ef6b1b44297985a9f7b5f58b
+  languageName: node
+  linkType: hard
+
+"cannon-es@npm:^0.20.0":
+  version: 0.20.0
+  resolution: "cannon-es@npm:0.20.0"
+  checksum: a11c2a51d8f4bf314fdbe671dd03e025513e3ab98621d3260c06f2c2a11922c67bc670f98e866a21919d966ba9b19aade5b7c3f9cf507a2ed7499c85eb8934bb
   languageName: node
   linkType: hard
 
@@ -6093,6 +6138,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "three-web-stalker@workspace:."
   dependencies:
+    "@react-three/cannon": ^6.5.0
     "@react-three/fiber": ^8.9.1
     "@stylelint/postcss-css-in-js": ^0.38.0
     "@types/chrome": ^0.0.202

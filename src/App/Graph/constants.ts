@@ -1,5 +1,7 @@
 export const NODE_RADIUS = 3
 
+export const MOVE_SPEED = 50
+
 export const PAGE =
   '<!doctype html><html itemscope="" itemtype="http://schema.org/SearchResultsPage" lang="en"><head><meta charset="UTF-8"><meta content="origin" name="referrer"><meta content="/images/branding/googleg/1x/googleg_standard_color_128dp.png" itemprop="image"><title>test - Google Search</title><script nonce="7TGsrG2kbNTrdXgc6DQ1pQ">(function(){var b=window.addEventListener;window.addEventListener=function(a,c,d){"unload"!==a&&b(a,c,d)};}).call(this);(function(){window.google={kEI:\'xJ5_Y4LTIMWmqtsP4eWIsAY\',kEXPI:\'31\',kBL:\'-1VY\'};google.sn=\'web\';google.kHL=\'en\';})();(function(){' +
   'var f=this||self;var h,k=[];function l(a){for(var b;a&&(!a.getAttribute||!(b=a.getAttribute("eid")));)a=a.parentNode;return b||h}function m(a){for(var b=null;a&&(!a.getAttribute||!(b=a.getAttribute("leid")));)a=a.parentNode;return b}' +

@@ -8,10 +8,10 @@ export const Button = styled.button`
   justify-content: center;
   align-items: center;
 
-  color: ${({ theme }) => theme.color.text};
+  color: ${({ theme }) => theme.color.primary};
   background-color: ${({ theme }) => theme.color.background};
 
-  border: 1px solid ${({ theme }) => theme.color.text};
+  border: 1px solid ${({ theme }) => theme.color.primary};
   border-radius: 3px;
 
   cursor: pointer;

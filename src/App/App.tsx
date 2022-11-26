@@ -6,8 +6,8 @@ import Input from '../common/Input'
 import Pills from '../common/Pills'
 import { buildGraph } from './Graph'
 import Graph from './Graph/Graph'
-import { store } from './Graph/store'
-import { Configuration, Content, Main, Section, Wrapper } from './style'
+import { store } from './Graph/store/store'
+import { Configuration, Content, List, Main, Section, Wrapper } from './style'
 
 const isURLValid = (value: string): boolean => {
   return URL_TEST_REGEX.test(value)
@@ -87,8 +87,17 @@ const App: React.FC = () => {
           >
             BuildGraph
           </Button>
-          <p>{Object.keys(graph).join(' | ')}</p>
           <Graph rootURL={mode === 'url' ? baseSite ?? '' : searchUrl} />
+          <Section>
+            <h3>Indexed sites ({Object.keys(graph).length}):</h3>
+            <List>
+              {Object.keys(graph).map(url => (
+                <a key={url} href={url} target="_blank" rel="noreferrer">
+                  {url}
+                </a>
+              ))}
+            </List>
+          </Section>
         </Wrapper>
       </Content>
     </Main>
