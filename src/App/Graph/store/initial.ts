@@ -1,1 +1,1 @@
-export const INITIAL = { graph: {} }
+export const INITIAL = { graph: {}, active: null }

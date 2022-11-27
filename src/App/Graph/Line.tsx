@@ -32,7 +32,7 @@ const Line: React.FC<Props> = ({ start, end, color }) => {
         color={new Color(color)}
         linecap="round"
         linewidth={1}
-        // transparent
+        transparent
         // opacity={0.25}
         // alphaTest={0.25}
       />

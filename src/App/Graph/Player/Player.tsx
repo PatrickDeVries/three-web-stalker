@@ -1,24 +1,28 @@
 import { useSphere } from '@react-three/cannon'
 import { useFrame, useThree } from '@react-three/fiber'
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { BufferGeometry, Mesh, Vector3 } from 'three'
+import { useTheme } from 'styled-components'
+import { BufferGeometry, Color, Mesh, Vector2, Vector3 } from 'three'
 import { PointerLockControls as PointerLockControlsImpl } from 'three/examples/jsm/controls/PointerLockControls'
 import { MOVE_SPEED } from '../constants'
+import { store } from '../store'
 import { useMovement } from './useMovement'
 
 export interface PlayerControls {
   resetCamera: () => void
   lockCursor: () => void
+  onClick: () => void
 }
 
 export const Player = React.forwardRef((_, ref) => {
-  const { camera, gl } = useThree()
+  const theme = useTheme()
+  const { camera, gl, raycaster, scene, mouse } = useThree()
+
   const cursorControls = useRef<PointerLockControlsImpl>(null)
-
   const { forward, backward, left, right, up, down } = useMovement()
-
   const [needsReset, setNeedsReset] = useState<boolean>(false)
 
+  const reticle = useRef<Mesh<BufferGeometry>>(null)
   const [playerRef, api] = useSphere(() => ({
     mass: 0,
     type: 'Dynamic',
@@ -33,6 +37,12 @@ export const Player = React.forwardRef((_, ref) => {
   useFrame(() => {
     if (playerRef.current) {
       camera.position.copy(playerRef.current.position)
+
+      // place reticle
+      const vector = new Vector3(0, 0, -0.8).unproject(camera)
+      if (reticle.current) {
+        reticle.current.position.set(...vector.toArray())
+      }
 
       let direction = new Vector3(0, 0, 0)
       if (needsReset) {
@@ -72,12 +82,27 @@ export const Player = React.forwardRef((_, ref) => {
         cursorControls.current.lock()
       }
     },
+    onClick: () => {
+      raycaster.setFromCamera(new Vector2(), camera)
+      const nodes = raycaster
+        .intersectObjects(scene.children)
+        .filter(mesh => mesh.object.userData.hasOwnProperty('url'))
+      if (nodes.length && store.active !== nodes[0].object.userData.url) {
+        store.active = nodes[0].object.userData.url
+      } else if (store.active) {
+        store.active = null
+      }
+    },
   }))
 
   return (
     <>
       <pointerLockControls ref={cursorControls} args={[camera, gl.domElement]} />
       <mesh ref={playerRef as React.RefObject<Mesh<BufferGeometry>>} />
+      <mesh ref={reticle}>
+        <sphereGeometry args={[0.0005, 64, 32]} />
+        <meshBasicMaterial color={new Color(theme.color.contrast)} />
+      </mesh>
     </>
   )
 })

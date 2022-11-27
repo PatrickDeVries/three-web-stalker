@@ -14,11 +14,12 @@ import { Node as Node_ } from './types'
 extend({ TextGeometry })
 
 interface Props {
+  url: string
   node: Node_
 }
 
-const Node: React.FC<Props> = ({ node }) => {
-  const { graph } = useSnapshot(store)
+const Node: React.FC<Props> = ({ url, node }) => {
+  const { graph, active } = useSnapshot(store)
   const theme = useTheme()
   const font = new FontLoader().parse(fragment)
   const label = useRef<Mesh>(null)
@@ -36,9 +37,9 @@ const Node: React.FC<Props> = ({ node }) => {
 
   return (
     <>
-      <mesh position={[node.x, node.y, node.z]}>
+      <mesh position={[node.x, node.y, node.z]} userData={{ url }}>
         <sphereGeometry args={[NODE_RADIUS, 15, 15]} />
-        <meshStandardMaterial color={theme.color.primary} />
+        <meshStandardMaterial color={active === url ? theme.color.contrast : theme.color.primary} />
       </mesh>
       <mesh ref={label} position={[node.x + labelOffset, node.y + NODE_RADIUS + 0.5, node.z]}>
         <textGeometry

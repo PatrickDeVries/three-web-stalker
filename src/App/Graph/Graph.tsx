@@ -31,14 +31,19 @@ const Graph: React.FC<Props> = ({ rootURL }) => {
         Reset Position
       </Button>
       <Wrapper ref={canvasRef}>
-        <Canvas onClick={() => controlsRef.current?.lockCursor()}>
+        <Canvas
+          onClick={() => {
+            controlsRef.current?.lockCursor()
+            controlsRef.current?.onClick()
+          }}
+        >
           <ambientLight intensity={0.25} />
           <directionalLight position={[-3, 5, 8]} />
           <Physics>
             <Player ref={controlsRef} />
           </Physics>
           {Object.entries(graph).map(([url, node]) => (
-            <Node key={url} node={node} />
+            <Node key={url} url={url} node={node} />
           ))}
         </Canvas>
       </Wrapper>
