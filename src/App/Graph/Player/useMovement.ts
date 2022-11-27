@@ -15,26 +15,30 @@ const KEYS_TO_MOVEMENT: { [key in KeyboardCode]: Movement } = {
   Space: 'up',
   ShiftLeft: 'down',
 }
+
+const INITIAL = {
+  forward: false,
+  backward: false,
+  left: false,
+  right: false,
+  up: false,
+  down: false,
+}
+
 export const useMovement = () => {
-  const [movement, setMovement] = useState({
-    forward: false,
-    backward: false,
-    left: false,
-    right: false,
-    up: false,
-    down: false,
-  })
+  const [movement, setMovement] = useState(INITIAL)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const code = e.code
-      if (isKeyCodeUsed(code)) {
+      if (isKeyCodeUsed(code) && document.pointerLockElement) {
+        e.preventDefault()
         setMovement(m => ({ ...m, [KEYS_TO_MOVEMENT[code]]: true }))
       }
     }
     const handleKeyUp = (e: KeyboardEvent) => {
       const code = e.code
-      if (isKeyCodeUsed(code)) {
+      if (isKeyCodeUsed(code) && document.pointerLockElement) {
         setMovement(m => ({ ...m, [KEYS_TO_MOVEMENT[code]]: false }))
       }
     }

@@ -1,5 +1,6 @@
 import { MeshLine, MeshLineMaterial } from 'three.meshline'
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 
 extend({ PointerLockControls })
 
@@ -12,6 +13,7 @@ declare global {
         PointerLockControls,
         typeof PointerLockControls
       >
+      textGeometry: ReactThreeFiber.Object3DNode<TextGeometry, typeof TextGeometry>
     }
   }
 }
