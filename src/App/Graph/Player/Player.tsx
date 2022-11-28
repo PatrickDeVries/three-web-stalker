@@ -6,12 +6,15 @@ import {
   BufferGeometry,
   Color,
   Mesh,
+  MeshLambertMaterial,
   MeshStandardMaterial,
   SphereGeometry,
   Vector2,
   Vector3,
 } from 'three'
+import { MeshLine, MeshLineMaterial } from 'three.meshline'
 import { PointerLockControls as PointerLockControlsImpl } from 'three/examples/jsm/controls/PointerLockControls'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 import { MOVE_SPEED } from '../constants'
 import { activeNodeStore } from '../store'
 import { MeshType } from '../types'
@@ -28,7 +31,7 @@ export const Player = React.forwardRef((_, ref) => {
   const { camera, gl, raycaster, scene } = useThree()
 
   const cursorControls = useRef<PointerLockControlsImpl>(null)
-  const { forward, backward, left, right, up, down } = useMovement()
+  const { forward, backward, left, right, up, down, sprint } = useMovement()
   const [needsReset, setNeedsReset] = useState<boolean>(false)
 
   const reticle = useRef<Mesh<BufferGeometry>>(null)
@@ -72,7 +75,7 @@ export const Player = React.forwardRef((_, ref) => {
         direction
           .subVectors(frontVector, sideVector)
           .normalize()
-          .multiplyScalar(MOVE_SPEED)
+          .multiplyScalar(MOVE_SPEED * (sprint ? 2 : 1))
           .applyEuler(camera.rotation)
       }
       api.velocity.set(direction.x, direction.y, direction.z)
@@ -98,23 +101,66 @@ export const Player = React.forwardRef((_, ref) => {
         .filter(mesh => mesh.object.userData.type === MeshType.Node)
 
       if (nodes.length && activeNodeStore.url !== nodes[0].object.userData.url) {
-        activeNodeStore.url = nodes[0].object.userData.url
+        const clickedNode = nodes[0].object
+        activeNodeStore.url = clickedNode.userData.url
 
         scene.children.forEach(child => {
+          // handle node selection
           if (child.userData.type === MeshType.Node) {
-            if (child.userData.url !== nodes[0].object.userData.url) {
-              ;(child as Mesh<SphereGeometry, MeshStandardMaterial>).material.color = new Color(
-                theme.color.primary,
-              )
+            const nodeChild = child as Mesh<SphereGeometry, MeshStandardMaterial>
+            if (child.userData.url === clickedNode.userData.url) {
+              nodeChild.material.color = new Color(theme.color.primary)
+            } else if (clickedNode.userData.connections.has(child.userData.url)) {
+              nodeChild.material.color = new Color(theme.color.primary80)
             } else {
-              ;(child as Mesh<SphereGeometry, MeshStandardMaterial>).material.color = new Color(
-                theme.color.contrast,
-              )
+              nodeChild.material.color = new Color(theme.color.primary60)
+            }
+          } // handle text selection
+          else if (child.userData.type === MeshType.Text) {
+            const nodeChild = child as Mesh<TextGeometry, MeshLambertMaterial>
+            if (child.userData.url === clickedNode.userData.url) {
+              nodeChild.material.color = new Color(theme.color.contrast)
+            } else if (clickedNode.userData.connections.has(child.userData.url)) {
+              nodeChild.material.color = new Color(theme.color.contrast60)
+            } else {
+              nodeChild.material.color = new Color(theme.color.contrast60)
+            }
+          }
+          // handle connection selection
+          else if (child.userData.type === MeshType.Connection) {
+            const lineChild = child as Mesh<typeof MeshLine, typeof MeshLineMaterial>
+            if (
+              child.userData.from === clickedNode.userData.url ||
+              child.userData.to === clickedNode.userData.url
+            ) {
+              lineChild.material.color = new Color(theme.color.secondary)
+            } else {
+              lineChild.material.color = new Color(theme.color.secondary60)
             }
           }
         })
-      } else if (activeNodeStore.url) {
+      } else {
         activeNodeStore.url = null
+
+        scene.children.forEach(child => {
+          // handle node selection
+          if (child.userData.type === MeshType.Node) {
+            ;(child as Mesh<SphereGeometry, MeshStandardMaterial>).material.color = new Color(
+              theme.color.primary,
+            )
+          } // handle text selection
+          else if (child.userData.type === MeshType.Text) {
+            ;(child as Mesh<TextGeometry, MeshLambertMaterial>).material.color = new Color(
+              theme.color.contrast,
+            )
+          }
+          // handle connection selection
+          else if (child.userData.type === MeshType.Connection) {
+            ;(child as Mesh<typeof MeshLine, typeof MeshLineMaterial>).material.color = new Color(
+              theme.color.secondary,
+            )
+          }
+        })
       }
     },
   }))

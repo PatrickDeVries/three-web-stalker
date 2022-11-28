@@ -1,10 +1,8 @@
 import { useMemo, useState } from 'react'
 import { useSnapshot } from 'valtio'
-import Button from '../common/Button'
 import { URL_TEST_REGEX } from '../common/constants'
 import Input from '../common/Input'
 import Pills from '../common/Pills'
-import { buildGraph } from './Graph'
 import Graph from './Graph/Graph'
 import { activeNodeStore, graphStore } from './Graph/store/store'
 import { Configuration, Content, List, Main, Section, Wrapper } from './style'
@@ -26,7 +24,15 @@ const App: React.FC = () => {
     [search],
   )
 
-  const graphComponent = useMemo(() => <Graph />, [])
+  const graphComponent = useMemo(
+    () => (
+      <Graph
+        baseURL={mode === 'url' ? baseSite ?? '' : searchUrl}
+        maxDepth={parseInt(maxDepth, 10)}
+      />
+    ),
+    [baseSite, maxDepth, mode, searchUrl],
+  )
 
   return (
     <Main>
@@ -82,16 +88,8 @@ const App: React.FC = () => {
               </a>
             </h3>
           </Section>
-          <Button
-            onClick={() => {
-              graphStore.graph = {}
-              buildGraph(mode === 'url' ? baseSite ?? '' : searchUrl, parseInt(maxDepth, 10))
-            }}
-          >
-            BuildGraph
-          </Button>
+
           {graphComponent}
-          {/* <Graph /> */}
           <Section>
             <h3>Selected site: {url}</h3>
           </Section>

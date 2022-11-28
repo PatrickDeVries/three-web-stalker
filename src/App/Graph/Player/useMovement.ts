@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-type Movement = 'forward' | 'backward' | 'left' | 'right' | 'up' | 'down'
-const USED_KEYS = ['KeyW', 'KeyS', 'KeyA', 'KeyD', 'Space', 'ShiftLeft'] as const
+type Movement = 'forward' | 'backward' | 'left' | 'right' | 'up' | 'down' | 'sprint'
+const USED_KEYS = ['KeyW', 'KeyS', 'KeyA', 'KeyD', 'Space', 'ShiftLeft', 'ControlLeft'] as const
 type KeyboardCode = typeof USED_KEYS[number]
 
 const isKeyCodeUsed = (keyCode: string): keyCode is KeyboardCode =>
@@ -13,7 +13,8 @@ const KEYS_TO_MOVEMENT: { [key in KeyboardCode]: Movement } = {
   KeyA: 'left',
   KeyD: 'right',
   Space: 'up',
-  ShiftLeft: 'down',
+  ShiftLeft: 'sprint',
+  ControlLeft: 'down',
 }
 
 const INITIAL = {
@@ -23,6 +24,7 @@ const INITIAL = {
   right: false,
   up: false,
   down: false,
+  sprint: false,
 }
 
 export const useMovement = () => {
@@ -50,5 +52,5 @@ export const useMovement = () => {
     }
   }, [])
 
-  return { ...movement, keysHeld: Object.values(movement).filter(val => val).length }
+  return movement
 }

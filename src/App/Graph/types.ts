@@ -10,4 +10,6 @@ export type Graph = Record<string, Node> // URL to node
 
 export enum MeshType {
   Node = 'NODE',
+  Connection = 'CONNECTION',
+  Text = 'TEXT',
 }

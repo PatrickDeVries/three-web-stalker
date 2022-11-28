@@ -5,7 +5,7 @@ import { Mesh } from 'three'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 import { useSnapshot } from 'valtio'
-import fragment from '../../../public/Fragment Mono_Regular.json'
+import fragment from '../../Fragment Mono_Regular.json'
 import { NODE_RADIUS } from './constants'
 import Line from './Line'
 import { graphStore } from './store'
@@ -37,11 +37,18 @@ const Node: React.FC<Props> = ({ url, node }) => {
 
   return (
     <>
-      <mesh position={[node.x, node.y, node.z]} userData={{ url, type: MeshType.Node }}>
+      <mesh
+        position={[node.x, node.y, node.z]}
+        userData={{ url, connections: node.connections, type: MeshType.Node }}
+      >
         <sphereGeometry args={[NODE_RADIUS, 15, 15]} />
         <meshStandardMaterial color={theme.color.primary} />
       </mesh>
-      <mesh ref={label} position={[node.x + labelOffset, node.y + NODE_RADIUS + 0.5, node.z]}>
+      <mesh
+        ref={label}
+        position={[node.x + labelOffset, node.y + NODE_RADIUS + 0.5, node.z]}
+        userData={{ url, connections: node.connections, type: MeshType.Text }}
+      >
         <textGeometry
           args={[
             node.label,
@@ -62,9 +69,10 @@ const Node: React.FC<Props> = ({ url, node }) => {
           graph.hasOwnProperty(connection) && (
             <Line
               key={connection}
-              start={graph[connection]}
-              end={node}
-              color={theme.color.secondary90}
+              start={node}
+              end={graph[connection]}
+              color={theme.color.secondary}
+              userData={{ type: MeshType.Connection, from: url, to: connection }}
             />
           ),
       )}

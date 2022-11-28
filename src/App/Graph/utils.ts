@@ -54,22 +54,22 @@ const buildInnerGraph = async (
   childCount: number,
   childIndex: number,
 ) => {
-  const prevNode = graphStore.graph[parentURL]
+  const urls = (await getURLS(baseURL)).map(url => baseURL + '/' + url).slice(0, 6)
 
-  const d = childCount * 4 // line scale factor
+  const prevNode = graphStore.graph[parentURL]
+  const d = childCount * Math.max(10 - depth, 1) // line scale factor
 
   let angle = childIndex * ((Math.PI * 2) / childCount)
   addToGraph({
     [baseURL]: {
-      label: baseURL,
-      x: d * Math.cos(angle) + prevNode.x,
-      y: d * Math.sin(angle) + prevNode.y,
-      z: prevNode.z - d,
+      label: baseURL.split('?')[0],
+      x: childCount > 1 ? d * Math.cos(angle) + prevNode.x : prevNode.x,
+      y: childCount > 1 ? d * Math.sin(angle) + prevNode.y : prevNode.y,
+      z: prevNode.z - 50 * Math.max(maxDepth - depth, 1),
       connections: new Set<string>([parentURL]),
     },
   })
 
-  const urls = await getURLS(baseURL)
   addToConnections(baseURL, urls)
 
   if (depth < maxDepth) {
@@ -88,7 +88,7 @@ const buildInnerGraph = async (
 // builds the full graph for a given URL and max depth
 export const buildGraph = async (baseURL: string, maxDepth: number) => {
   addToGraph({
-    [baseURL]: { label: baseURL, x: 0, y: 0, z: 0, connections: new Set<string>() },
+    [baseURL]: { label: baseURL.split('?')[0], x: 0, y: 0, z: 0, connections: new Set<string>() },
   })
 
   const urls = await getURLS(baseURL)
@@ -98,6 +98,7 @@ export const buildGraph = async (baseURL: string, maxDepth: number) => {
     for (let i = 0; i < urls.length; i++) {
       if (graphStore.graph.hasOwnProperty(urls[i])) {
         // if the url is already in the graph, just link it to this base URL
+
         addToConnections(urls[i], baseURL)
       } else {
         // if the url is new to the graph, build a graph for it

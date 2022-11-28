@@ -5,8 +5,12 @@ export const Wrapper = styled.div`
   height: 100%;
 
   min-height: 80vh;
-  min-width: 80vw;
 
   border: 1px solid ${({ theme }) => theme.color.primary};
   background-color: ${({ theme }) => theme.color.background50};
+`
+
+export const Buttons = styled.div`
+  display: flex;
+  gap: 1rem;
 `

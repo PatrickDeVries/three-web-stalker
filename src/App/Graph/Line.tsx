@@ -10,9 +10,11 @@ interface Props {
   start: Node
   end: Node
   color: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  userData: { [key: string]: any }
 }
 
-const Line: React.FC<Props> = ({ start, end, color }) => {
+const Line: React.FC<Props> = ({ start, end, color, userData }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ref = useRef<any>(null)
   useEffect(() => {
@@ -25,16 +27,14 @@ const Line: React.FC<Props> = ({ start, end, color }) => {
   }, [start, end])
 
   return (
-    <mesh raycast={MeshLineRaycast} ref={ref}>
+    <mesh raycast={MeshLineRaycast} ref={ref} userData={userData}>
       <meshLine attach="geometry" />
       <meshLineMaterial
         attach="material"
         color={new Color(color)}
         linecap="round"
-        linewidth={1}
+        linewidth={0.25}
         transparent
-        // opacity={0.25}
-        // alphaTest={0.25}
       />
     </mesh>
   )
