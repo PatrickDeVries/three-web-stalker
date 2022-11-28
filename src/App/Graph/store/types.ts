@@ -2,5 +2,8 @@ import { Graph } from '../types'
 
 export interface GraphStore {
   graph: Graph
-  active: string | null
+}
+
+export interface NodeStore {
+  url: string | null
 }

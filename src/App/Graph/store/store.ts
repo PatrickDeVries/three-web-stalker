@@ -1,5 +1,7 @@
 import { proxy } from 'valtio'
-import { INITIAL } from './initial'
-import { GraphStore } from './types'
+import { INITIAL_GRAPH, INITIAL_NODE } from './initial'
+import { GraphStore, NodeStore } from './types'
 
-export const store = proxy<GraphStore>(INITIAL)
+export const graphStore = proxy<GraphStore>(INITIAL_GRAPH)
+
+export const activeNodeStore = proxy<NodeStore>(INITIAL_NODE)

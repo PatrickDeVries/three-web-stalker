@@ -8,8 +8,8 @@ import { useSnapshot } from 'valtio'
 import fragment from '../../../public/Fragment Mono_Regular.json'
 import { NODE_RADIUS } from './constants'
 import Line from './Line'
-import { store } from './store'
-import { Node as Node_ } from './types'
+import { graphStore } from './store'
+import { MeshType, Node as Node_ } from './types'
 
 extend({ TextGeometry })
 
@@ -19,7 +19,7 @@ interface Props {
 }
 
 const Node: React.FC<Props> = ({ url, node }) => {
-  const { graph, active } = useSnapshot(store)
+  const { graph } = useSnapshot(graphStore)
   const theme = useTheme()
   const font = new FontLoader().parse(fragment)
   const label = useRef<Mesh>(null)
@@ -37,9 +37,9 @@ const Node: React.FC<Props> = ({ url, node }) => {
 
   return (
     <>
-      <mesh position={[node.x, node.y, node.z]} userData={{ url }}>
+      <mesh position={[node.x, node.y, node.z]} userData={{ url, type: MeshType.Node }}>
         <sphereGeometry args={[NODE_RADIUS, 15, 15]} />
-        <meshStandardMaterial color={active === url ? theme.color.contrast : theme.color.primary} />
+        <meshStandardMaterial color={theme.color.primary} />
       </mesh>
       <mesh ref={label} position={[node.x + labelOffset, node.y + NODE_RADIUS + 0.5, node.z]}>
         <textGeometry

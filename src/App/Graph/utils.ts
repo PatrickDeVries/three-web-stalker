@@ -1,15 +1,15 @@
 import { URL_MATCH_REGEX } from '../../common/constants'
 import { PAGE } from './constants'
-import { store } from './store/store'
+import { graphStore } from './store/store'
 import { Graph } from './types'
 
 const addToGraph = (newNodes: Graph) =>
-  Object.entries(newNodes).forEach(([key, val]) => (store.graph[key] = val))
+  Object.entries(newNodes).forEach(([key, val]) => (graphStore.graph[key] = val))
 
 const addToConnections = (nodeKey: string, toAdd: string | string[]) =>
   typeof toAdd === 'string'
-    ? store.graph[nodeKey].connections.add(toAdd)
-    : toAdd.forEach(url => store.graph[nodeKey].connections.add(url))
+    ? graphStore.graph[nodeKey].connections.add(toAdd)
+    : toAdd.forEach(url => graphStore.graph[nodeKey].connections.add(url))
 
 // make a fetch and return the string version of a page
 const getPage = async (url: string): Promise<string> => {
@@ -54,7 +54,7 @@ const buildInnerGraph = async (
   childCount: number,
   childIndex: number,
 ) => {
-  const prevNode = store.graph[parentURL]
+  const prevNode = graphStore.graph[parentURL]
 
   const d = childCount * 4 // line scale factor
 
@@ -74,7 +74,7 @@ const buildInnerGraph = async (
 
   if (depth < maxDepth) {
     for (let i = 0; i < urls.length; i++) {
-      if (store.graph.hasOwnProperty(urls[i])) {
+      if (graphStore.graph.hasOwnProperty(urls[i])) {
         // if the url is already in the graph, just link it to this base URL
         addToConnections(urls[i], baseURL)
       } else {
@@ -96,7 +96,7 @@ export const buildGraph = async (baseURL: string, maxDepth: number) => {
 
   if (maxDepth > 0) {
     for (let i = 0; i < urls.length; i++) {
-      if (store.graph.hasOwnProperty(urls[i])) {
+      if (graphStore.graph.hasOwnProperty(urls[i])) {
         // if the url is already in the graph, just link it to this base URL
         addToConnections(urls[i], baseURL)
       } else {

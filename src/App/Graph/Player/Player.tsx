@@ -2,10 +2,19 @@ import { useSphere } from '@react-three/cannon'
 import { useFrame, useThree } from '@react-three/fiber'
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { useTheme } from 'styled-components'
-import { BufferGeometry, Color, Mesh, Vector2, Vector3 } from 'three'
+import {
+  BufferGeometry,
+  Color,
+  Mesh,
+  MeshStandardMaterial,
+  SphereGeometry,
+  Vector2,
+  Vector3,
+} from 'three'
 import { PointerLockControls as PointerLockControlsImpl } from 'three/examples/jsm/controls/PointerLockControls'
 import { MOVE_SPEED } from '../constants'
-import { store } from '../store'
+import { activeNodeStore } from '../store'
+import { MeshType } from '../types'
 import { useMovement } from './useMovement'
 
 export interface PlayerControls {
@@ -16,7 +25,7 @@ export interface PlayerControls {
 
 export const Player = React.forwardRef((_, ref) => {
   const theme = useTheme()
-  const { camera, gl, raycaster, scene, mouse } = useThree()
+  const { camera, gl, raycaster, scene } = useThree()
 
   const cursorControls = useRef<PointerLockControlsImpl>(null)
   const { forward, backward, left, right, up, down } = useMovement()
@@ -86,11 +95,26 @@ export const Player = React.forwardRef((_, ref) => {
       raycaster.setFromCamera(new Vector2(), camera)
       const nodes = raycaster
         .intersectObjects(scene.children)
-        .filter(mesh => mesh.object.userData.hasOwnProperty('url'))
-      if (nodes.length && store.active !== nodes[0].object.userData.url) {
-        store.active = nodes[0].object.userData.url
-      } else if (store.active) {
-        store.active = null
+        .filter(mesh => mesh.object.userData.type === MeshType.Node)
+
+      if (nodes.length && activeNodeStore.url !== nodes[0].object.userData.url) {
+        activeNodeStore.url = nodes[0].object.userData.url
+
+        scene.children.forEach(child => {
+          if (child.userData.type === MeshType.Node) {
+            if (child.userData.url !== nodes[0].object.userData.url) {
+              ;(child as Mesh<SphereGeometry, MeshStandardMaterial>).material.color = new Color(
+                theme.color.primary,
+              )
+            } else {
+              ;(child as Mesh<SphereGeometry, MeshStandardMaterial>).material.color = new Color(
+                theme.color.contrast,
+              )
+            }
+          }
+        })
+      } else if (activeNodeStore.url) {
+        activeNodeStore.url = null
       }
     },
   }))

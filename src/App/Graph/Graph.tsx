@@ -6,17 +6,15 @@ import { useSnapshot } from 'valtio'
 import Button from '../../common/Button'
 import Node from './Node'
 import { Player, PlayerControls } from './Player/Player'
-import { store } from './store/store'
+import { graphStore } from './store/store'
 import { Wrapper } from './style'
 
 extend({ PointerLockControls: PointerLockControlsImpl })
 
-interface Props {
-  rootURL: string
-}
+interface Props {}
 
-const Graph: React.FC<Props> = ({ rootURL }) => {
-  const { graph } = useSnapshot(store)
+const Graph: React.FC<Props> = () => {
+  const { graph } = useSnapshot(graphStore)
   const canvasRef = useRef<HTMLDivElement>(null)
   const controlsRef = useRef<PlayerControls>(null)
 

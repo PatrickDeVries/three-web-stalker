@@ -6,7 +6,7 @@ import Input from '../common/Input'
 import Pills from '../common/Pills'
 import { buildGraph } from './Graph'
 import Graph from './Graph/Graph'
-import { store } from './Graph/store/store'
+import { activeNodeStore, graphStore } from './Graph/store/store'
 import { Configuration, Content, List, Main, Section, Wrapper } from './style'
 
 const isURLValid = (value: string): boolean => {
@@ -18,12 +18,15 @@ const App: React.FC = () => {
   const [baseSite, setBaseSite] = useState<string | null>(null)
   const [search, setSearch] = useState<string>('')
   const [maxDepth, setMaxDepth] = useState<string>('1')
-  const { graph } = useSnapshot(store)
+  const { graph } = useSnapshot(graphStore)
+  const { url } = useSnapshot(activeNodeStore)
 
   const searchUrl = useMemo(
     () => `http://google.com/search?${new URLSearchParams({ q: search })}`,
     [search],
   )
+
+  const graphComponent = useMemo(() => <Graph />, [])
 
   return (
     <Main>
@@ -81,13 +84,17 @@ const App: React.FC = () => {
           </Section>
           <Button
             onClick={() => {
-              store.graph = {}
+              graphStore.graph = {}
               buildGraph(mode === 'url' ? baseSite ?? '' : searchUrl, parseInt(maxDepth, 10))
             }}
           >
             BuildGraph
           </Button>
-          <Graph rootURL={mode === 'url' ? baseSite ?? '' : searchUrl} />
+          {graphComponent}
+          {/* <Graph /> */}
+          <Section>
+            <h3>Selected site: {url}</h3>
+          </Section>
           <Section>
             <h3>Indexed sites ({Object.keys(graph).length}):</h3>
             <List>
