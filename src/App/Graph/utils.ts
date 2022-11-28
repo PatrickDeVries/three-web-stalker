@@ -37,12 +37,16 @@ const getPage = async (url: string): Promise<string> => {
 
 // get list of links from a url
 const getURLS = async (url: string): Promise<string[]> => {
-  const page = await getPage(url) // PAGE
-  return [...page.matchAll(URL_MATCH_REGEX)].map(match => {
-    const trimmed = match[1].trim()
-    if (trimmed.endsWith('/')) return trimmed.slice(0, -1)
-    return trimmed
-  })
+  try {
+    const page = await getPage(url) // PAGE
+    return [...page.matchAll(URL_MATCH_REGEX)].map(match => {
+      const trimmed = match[1].trim()
+      if (trimmed.endsWith('/')) return trimmed.slice(0, -1)
+      return trimmed
+    })
+  } catch {
+    return []
+  }
 }
 
 const buildInnerGraph = async (
@@ -53,7 +57,7 @@ const buildInnerGraph = async (
   childCount: number,
   childIndex: number,
 ) => {
-  const urls = await getURLS(baseURL) //.map(url => baseURL + '/' + url).slice(0, 6)
+  const urls = depth < maxDepth ? (await getURLS(baseURL)).filter(url => url !== baseURL) : [] //.map(url => baseURL + '/' + url).slice(0, 6)
 
   const parent = graphStore.graph[parentURL]
   const d = childCount * Math.max(10 - depth, 1) // line scale factor
@@ -65,12 +69,10 @@ const buildInnerGraph = async (
       x: childCount > 1 ? d * Math.cos(angle) + parent.x : parent.x,
       y: childCount > 1 ? d * Math.sin(angle) + parent.y : parent.y,
       z: parent.z - 50 * Math.max(maxDepth - depth, 1),
-      connections: new Set<string>(),
+      connections: new Set<string>(urls),
       parent: parentURL,
     },
   })
-
-  addToConnections(baseURL, urls)
 
   if (depth < maxDepth) {
     for (let i = 0; i < urls.length; i++) {
@@ -87,25 +89,23 @@ const buildInnerGraph = async (
 
 // builds the full graph for a given URL and max depth
 export const buildGraph = async (baseURL: string, maxDepth: number) => {
+  const urls = (await getURLS(baseURL)).filter(url => url !== baseURL)
+
   addToGraph({
     [baseURL]: {
       label: baseURL.split('?')[0],
       x: 0,
       y: 0,
       z: 0,
-      connections: new Set<string>(),
+      connections: new Set<string>(urls),
       parent: null,
     },
   })
-
-  const urls = await getURLS(baseURL)
-  addToConnections(baseURL, urls)
 
   if (maxDepth > 0) {
     for (let i = 0; i < urls.length; i++) {
       if (graphStore.graph.hasOwnProperty(urls[i])) {
         // if the url is already in the graph, just link it to this base URL
-
         addToConnections(urls[i], baseURL)
       } else {
         // if the url is new to the graph, build a graph for it
