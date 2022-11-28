@@ -1,7 +1,7 @@
 import { extend } from '@react-three/fiber'
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import { useTheme } from 'styled-components'
-import { Mesh } from 'three'
+import { Mesh, Vector3 } from 'three'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 import { useSnapshot } from 'valtio'
@@ -69,8 +69,8 @@ const Node: React.FC<Props> = ({ url, node }) => {
           graph.hasOwnProperty(connection) && (
             <Line
               key={connection}
-              start={node}
-              end={graph[connection]}
+              start={new Vector3(node.x, node.y, node.z)}
+              end={new Vector3(graph[connection].x, graph[connection].y, graph[connection].z)}
               color={theme.color.secondary}
               userData={{ type: MeshType.Connection, from: url, to: connection }}
             />

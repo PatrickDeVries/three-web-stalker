@@ -91,7 +91,14 @@ const App: React.FC = () => {
 
           {graphComponent}
           <Section>
-            <h3>Selected site: {url}</h3>
+            <h3>
+              Selected site:&nbsp;
+              {url && (
+                <a href={url} target="_blank" rel="noreferrer">
+                  {url}
+                </a>
+              )}
+            </h3>
           </Section>
           <Section>
             <h3>Indexed sites ({Object.keys(graph).length}):</h3>

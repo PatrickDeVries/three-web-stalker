@@ -2,16 +2,15 @@ import { extend } from '@react-three/fiber'
 import React, { useEffect, useRef } from 'react'
 import { BufferGeometry, Color, Vector3 } from 'three'
 import { MeshLine, MeshLineMaterial, MeshLineRaycast } from 'three.meshline'
-import { Node } from './types'
 
 extend({ MeshLine, MeshLineMaterial })
 
 interface Props {
-  start: Node
-  end: Node
+  start: Vector3 //Node
+  end: Vector3 // Node
   color: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  userData: { [key: string]: any }
+  userData?: { [key: string]: any }
 }
 
 const Line: React.FC<Props> = ({ start, end, color, userData }) => {

@@ -4,6 +4,7 @@ export interface Node {
   y: number
   z: number
   connections: Set<string>
+  parent: string | null
 }
 
 export type Graph = Record<string, Node> // URL to node

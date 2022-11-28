@@ -5,6 +5,7 @@ import { useTheme } from 'styled-components'
 import {
   BufferGeometry,
   Color,
+  Group,
   Mesh,
   MeshLambertMaterial,
   MeshStandardMaterial,
@@ -16,7 +17,7 @@ import { MeshLine, MeshLineMaterial } from 'three.meshline'
 import { PointerLockControls as PointerLockControlsImpl } from 'three/examples/jsm/controls/PointerLockControls'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 import { MOVE_SPEED } from '../constants'
-import { activeNodeStore } from '../store'
+import { activeNodeStore, graphStore } from '../store'
 import { MeshType } from '../types'
 import { useMovement } from './useMovement'
 
@@ -35,10 +36,11 @@ export const Player = React.forwardRef((_, ref) => {
   const [needsReset, setNeedsReset] = useState<boolean>(false)
 
   const reticle = useRef<Mesh<BufferGeometry>>(null)
+  const lines = useRef<Group>(null)
   const [playerRef, api] = useSphere(() => ({
     mass: 0,
     type: 'Dynamic',
-    position: [0, 0, 20],
+    position: [0, 0, 50],
   }))
 
   const velocity = useRef([0, 0, 0])
@@ -49,24 +51,29 @@ export const Player = React.forwardRef((_, ref) => {
   useFrame(() => {
     if (playerRef.current) {
       camera.position.copy(playerRef.current.position)
-
       // place reticle
       const vector = new Vector3(0, 0, -0.8).unproject(camera)
       if (reticle.current) {
         reticle.current.position.set(...vector.toArray())
       }
+      if (lines.current) {
+        lines.current.position.set(...vector.toArray())
+        lines.current.lookAt(camera.position)
+      }
 
       let direction = new Vector3(0, 0, 0)
       if (needsReset) {
-        if (playerRef.current.position.distanceTo(new Vector3(0, 0, 20)) < 1) {
+        // Move player back to roughly the starting point
+        if (playerRef.current.position.distanceTo(new Vector3(0, 0, 50)) < 1) {
           setNeedsReset(() => false)
         } else {
-          camera.rotation.set(0, 0, 0)
+          camera.lookAt(new Vector3(0, 0, 0))
           direction
-            .subVectors(new Vector3(0, 0, 20), playerRef.current.position)
+            .subVectors(new Vector3(0, 0, 50), playerRef.current.position)
             .applyEuler(camera.rotation)
         }
       } else {
+        // Calculating front/side movement
         let frontVector = new Vector3(0, 0, 0)
         let sideVector = new Vector3(0, 0, 0)
 
@@ -80,7 +87,6 @@ export const Player = React.forwardRef((_, ref) => {
       }
       api.velocity.set(direction.x, direction.y, direction.z)
 
-      // Calculating front/side movement
       playerRef.current.getWorldPosition(playerRef.current.position)
     }
   })
@@ -101,37 +107,45 @@ export const Player = React.forwardRef((_, ref) => {
         .filter(mesh => mesh.object.userData.type === MeshType.Node)
 
       if (nodes.length && activeNodeStore.url !== nodes[0].object.userData.url) {
-        const clickedNode = nodes[0].object
-        activeNodeStore.url = clickedNode.userData.url
+        const clickedURL = nodes[0].object.userData.url
+        activeNodeStore.url = clickedURL
+
+        const connectedURLs = new Set<string>([...graphStore.graph[clickedURL].connections])
+        let parentURL: string | null = graphStore.graph[clickedURL].parent
+        while (parentURL !== null) {
+          connectedURLs.add(parentURL)
+          parentURL = graphStore.graph[parentURL].parent
+        }
 
         scene.children.forEach(child => {
           // handle node selection
           if (child.userData.type === MeshType.Node) {
             const nodeChild = child as Mesh<SphereGeometry, MeshStandardMaterial>
-            if (child.userData.url === clickedNode.userData.url) {
-              nodeChild.material.color = new Color(theme.color.primary)
-            } else if (clickedNode.userData.connections.has(child.userData.url)) {
+            if (nodeChild.userData.url === clickedURL) {
+              nodeChild.material.color = new Color(theme.color.contrast)
+            } else if (connectedURLs.has(nodeChild.userData.url)) {
               nodeChild.material.color = new Color(theme.color.primary80)
             } else {
-              nodeChild.material.color = new Color(theme.color.primary60)
+              nodeChild.material.color = new Color(theme.color.primary40)
             }
           } // handle text selection
           else if (child.userData.type === MeshType.Text) {
             const nodeChild = child as Mesh<TextGeometry, MeshLambertMaterial>
-            if (child.userData.url === clickedNode.userData.url) {
+            if (nodeChild.userData.url === clickedURL) {
               nodeChild.material.color = new Color(theme.color.contrast)
-            } else if (clickedNode.userData.connections.has(child.userData.url)) {
-              nodeChild.material.color = new Color(theme.color.contrast60)
+            } else if (connectedURLs.has(nodeChild.userData.url)) {
+              nodeChild.material.color = new Color(theme.color.contrast80)
             } else {
-              nodeChild.material.color = new Color(theme.color.contrast60)
+              nodeChild.material.color = new Color(theme.color.contrast40)
             }
           }
           // handle connection selection
           else if (child.userData.type === MeshType.Connection) {
             const lineChild = child as Mesh<typeof MeshLine, typeof MeshLineMaterial>
             if (
-              child.userData.from === clickedNode.userData.url ||
-              child.userData.to === clickedNode.userData.url
+              lineChild.userData.from === clickedURL ||
+              (connectedURLs.has(lineChild.userData.from) &&
+                (connectedURLs.has(lineChild.userData.to) || lineChild.userData.to === clickedURL))
             ) {
               lineChild.material.color = new Color(theme.color.secondary)
             } else {
@@ -173,6 +187,24 @@ export const Player = React.forwardRef((_, ref) => {
         <sphereGeometry args={[0.0005, 64, 32]} />
         <meshBasicMaterial color={new Color(theme.color.contrast)} />
       </mesh>
+      <group ref={lines}>
+        <mesh position={new Vector3(0.003, 0, 0)}>
+          <boxGeometry args={[0.002, 0.0005, 0.0005]} />
+          <meshBasicMaterial color={new Color(theme.color.primary80)} transparent opacity={0.9} />
+        </mesh>
+        <mesh position={new Vector3(-0.003, 0, 0)}>
+          <boxGeometry args={[0.002, 0.0005, 0.0005]} />
+          <meshBasicMaterial color={new Color(theme.color.primary80)} transparent opacity={0.9} />
+        </mesh>
+        <mesh position={new Vector3(0, 0.003, 0)}>
+          <boxGeometry args={[0.0005, 0.002, 0.0005]} />
+          <meshBasicMaterial color={new Color(theme.color.primary80)} transparent opacity={0.9} />
+        </mesh>
+        <mesh position={new Vector3(0, -0.003, 0)}>
+          <boxGeometry args={[0.0005, 0.002, 0.0005]} />
+          <meshBasicMaterial color={new Color(theme.color.primary80)} transparent opacity={0.9} />
+        </mesh>
+      </group>
     </>
   )
 })
