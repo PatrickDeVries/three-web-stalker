@@ -1,11 +1,23 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useSnapshot } from 'valtio'
+import Button from '../common/Button'
 import { URL_TEST_REGEX } from '../common/constants'
 import Input from '../common/Input'
 import Pills from '../common/Pills'
+import { buildGraph } from './Graph'
 import Graph from './Graph/Graph'
+import { PlayerControls } from './Graph/Player'
 import { activeNodeStore, graphStore } from './Graph/store/store'
-import { Configuration, Content, List, Main, Section, Wrapper } from './style'
+import {
+  Configuration,
+  Content,
+  GraphButtons,
+  List,
+  Main,
+  Section,
+  SiteHeading,
+  Wrapper,
+} from './style'
 
 const isURLValid = (value: string): boolean => {
   return URL_TEST_REGEX.test(value)
@@ -16,6 +28,9 @@ const App: React.FC = () => {
   const [baseSite, setBaseSite] = useState<string | null>(null)
   const [search, setSearch] = useState<string>('')
   const [maxDepth, setMaxDepth] = useState<string>('1')
+
+  const controlsRef = useRef<PlayerControls>(null)
+
   const { graph } = useSnapshot(graphStore)
   const { url } = useSnapshot(activeNodeStore)
 
@@ -29,6 +44,7 @@ const App: React.FC = () => {
       <Graph
         baseURL={mode === 'url' ? baseSite ?? '' : searchUrl}
         maxDepth={parseInt(maxDepth, 10)}
+        controlsRef={controlsRef}
       />
     ),
     [baseSite, maxDepth, mode, searchUrl],
@@ -40,7 +56,7 @@ const App: React.FC = () => {
         <Wrapper>
           <h1>Three Web Stalker</h1>
           <Section>
-            <h3>Configuration</h3>
+            <h3>Initial Setup</h3>
             <Configuration>
               <Pills<'search' | 'url'>
                 options={[
@@ -76,9 +92,10 @@ const App: React.FC = () => {
               />
             </Configuration>
           </Section>
+
           <Section>
-            <h3>
-              Current site:&nbsp;
+            <SiteHeading>
+              <h3>Current Root:</h3>
               <a
                 href={mode === 'url' ? baseSite ?? '' : searchUrl}
                 target="_blank"
@@ -86,28 +103,60 @@ const App: React.FC = () => {
               >
                 {mode === 'url' ? baseSite : searchUrl}
               </a>
-            </h3>
-          </Section>
+            </SiteHeading>
 
-          {graphComponent}
-          <Section>
-            <h3>
-              Selected site:&nbsp;
+            <SiteHeading>
+              <h3>Selected Site:&nbsp;</h3>
               {url && (
                 <a href={url} target="_blank" rel="noreferrer">
                   {url}
                 </a>
               )}
-            </h3>
+            </SiteHeading>
+
+            <GraphButtons>
+              <Button
+                onClick={() => {
+                  graphStore.graph = {}
+                  buildGraph(mode === 'url' ? baseSite ?? '' : searchUrl, parseInt(maxDepth))
+                  // controlsRef.current?.resetCamera()
+                }}
+              >
+                Build Graph
+              </Button>
+              <Button
+                disabled={!url}
+                onClick={() => {
+                  setMode('url')
+                  setBaseSite(url)
+                }}
+              >
+                Set Selected as Root
+              </Button>
+              <Button
+                onClick={() => {
+                  controlsRef.current?.resetCamera()
+                  controlsRef.current?.lockCursor()
+                }}
+              >
+                Reset Position
+              </Button>
+            </GraphButtons>
+
+            {graphComponent}
           </Section>
+
           <Section>
-            <h3>Indexed sites ({Object.keys(graph).length}):</h3>
+            <h3>Indexed Sites ({Object.keys(graph).length}):</h3>
             <List>
-              {Object.keys(graph).map(url => (
-                <a key={url} href={url} target="_blank" rel="noreferrer">
-                  {url}
-                </a>
-              ))}
+              {Object.keys(graph)
+                .map(url => url.replace('www.', ''))
+                .sort((a, b) => (a > b ? 1 : -1))
+                .map(url => (
+                  <a key={url} href={url} target="_blank" rel="noreferrer">
+                    {url}
+                  </a>
+                ))}
             </List>
           </Section>
         </Wrapper>

@@ -3,29 +3,25 @@ import { Canvas, extend } from '@react-three/fiber'
 import React, { useMemo, useRef } from 'react'
 import { PointerLockControls as PointerLockControlsImpl } from 'three/examples/jsm/controls/PointerLockControls'
 import { useSnapshot } from 'valtio'
-import Button from '../../common/Button'
 import Node from './Node'
 import { Player, PlayerControls } from './Player/Player'
 import { graphStore } from './store/store'
-import { Buttons, Wrapper } from './style'
-import { buildGraph } from './utils'
+import { Wrapper } from './style'
 
 extend({ PointerLockControls: PointerLockControlsImpl })
 
 interface Props {
-  baseURL: string
-  maxDepth: number
+  controlsRef: React.RefObject<PlayerControls>
 }
 
-const Graph: React.FC<Props> = ({ baseURL, maxDepth }) => {
+const Graph: React.FC<Props> = ({ controlsRef }) => {
   const { graph } = useSnapshot(graphStore)
   const canvasRef = useRef<HTMLDivElement>(null)
-  const controlsRef = useRef<PlayerControls>(null)
 
   const threeCanvas = useMemo(
     () => (
       <Canvas
-        onClick={() => {
+        onClick={e => {
           controlsRef.current?.lockCursor()
           controlsRef.current?.onClick()
         }}
@@ -40,33 +36,10 @@ const Graph: React.FC<Props> = ({ baseURL, maxDepth }) => {
         ))}
       </Canvas>
     ),
-    [graph],
+    [controlsRef, graph],
   )
 
-  return (
-    <>
-      <Buttons>
-        <Button
-          onClick={() => {
-            graphStore.graph = {}
-            buildGraph(baseURL, maxDepth)
-            controlsRef.current?.resetCamera()
-          }}
-        >
-          Build Graph
-        </Button>
-        <Button
-          onClick={() => {
-            controlsRef.current?.resetCamera()
-            controlsRef.current?.lockCursor()
-          }}
-        >
-          Reset Position
-        </Button>
-      </Buttons>
-      <Wrapper ref={canvasRef}>{threeCanvas}</Wrapper>
-    </>
-  )
+  return <Wrapper ref={canvasRef}>{threeCanvas}</Wrapper>
 }
 
 export default Graph

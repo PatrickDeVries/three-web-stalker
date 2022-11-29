@@ -36,6 +36,21 @@ export const Section = styled.div`
   gap: 0.5rem;
 `
 
+export const SiteHeading = styled.div`
+  display: flex;
+  gap: 0.25rem;
+  align-items: baseline;
+
+  white-space: nowrap;
+  > a {
+    width: 100%;
+
+    display: block;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+  }
+`
+
 export const Configuration = styled.div`
   width: 100%;
 
@@ -61,4 +76,9 @@ export const List = styled.div`
 
   border: 1px solid ${({ theme }) => theme.color.primary};
   overflow-y: auto;
+`
+
+export const GraphButtons = styled.div`
+  display: flex;
+  gap: 1rem;
 `

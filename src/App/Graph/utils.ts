@@ -38,6 +38,7 @@ const getPage = async (url: string): Promise<string> => {
 // get list of links from a url
 const getURLS = async (url: string): Promise<string[]> => {
   try {
+    // return URLS
     const page = await getPage(url) // PAGE
     return [...page.matchAll(URL_MATCH_REGEX)].map(match => {
       const trimmed = match[1].trim()
@@ -57,10 +58,13 @@ const buildInnerGraph = async (
   childCount: number,
   childIndex: number,
 ) => {
-  const urls = depth < maxDepth ? (await getURLS(baseURL)).filter(url => url !== baseURL) : [] //.map(url => baseURL + '/' + url).slice(0, 6)
+  const urls =
+    depth < maxDepth
+      ? (await getURLS(baseURL)).filter(url => url !== baseURL) //.map(url => baseURL + '/' + url)
+      : []
 
   const parent = graphStore.graph[parentURL]
-  const d = childCount * Math.max(10 - depth, 1) // line scale factor
+  const d = Math.max(1, childCount / 2) * Math.max(20 - depth * 5, 1) // line scale factor
 
   let angle = childIndex * ((Math.PI * 2) / childCount)
   addToGraph({

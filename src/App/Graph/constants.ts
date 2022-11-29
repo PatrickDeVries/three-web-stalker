@@ -2,6 +2,25 @@ export const NODE_RADIUS = 3
 
 export const MOVE_SPEED = 50
 
+export const URLS = [
+  'https://support.google.com/websearch/answer/181196?hl=en',
+  'https://www.google.com/webhp?hl=en&amp;ictx=2&amp;sa=X&amp;ved=0ahUKEwiCxemiocf7AhVFk2oFHeEyAmYQPQgK',
+  'https://languages.oup.com/google-dictionary-en',
+  'https://support.google.com/websearch/answer/10106608?hl=en',
+  'https://test.com',
+  'https://www.speedtest.net',
+  'https://www.merriam-webster.com/dictionary/test',
+  'https://en.wikipedia.org/wiki/Test',
+  'https://www.dictionary.com/browse/test',
+  'https://en.wiktionary.org/wiki/test',
+  'https://www.cdc.gov/coronavirus/2019-ncov/symptoms-testing/testing.html',
+  'https://fast.com',
+  'https://test.io',
+  'https://support.google.com/websearch/?p=ws_results_help&amp;hl=en&amp;fg=1',
+  'https://policies.google.com/privacy?hl=en&amp;fg=1',
+  'https://policies.google.com/terms?hl=en&amp;fg=1',
+]
+
 export const PAGE =
   '<!doctype html><html itemscope="" itemtype="http://schema.org/SearchResultsPage" lang="en"><head><meta charset="UTF-8"><meta content="origin" name="referrer"><meta content="/images/branding/googleg/1x/googleg_standard_color_128dp.png" itemprop="image"><title>test - Google Search</title><script nonce="7TGsrG2kbNTrdXgc6DQ1pQ">(function(){var b=window.addEventListener;window.addEventListener=function(a,c,d){"unload"!==a&&b(a,c,d)};}).call(this);(function(){window.google={kEI:\'xJ5_Y4LTIMWmqtsP4eWIsAY\',kEXPI:\'31\',kBL:\'-1VY\'};google.sn=\'web\';google.kHL=\'en\';})();(function(){' +
   'var f=this||self;var h,k=[];function l(a){for(var b;a&&(!a.getAttribute||!(b=a.getAttribute("eid")));)a=a.parentNode;return b||h}function m(a){for(var b=null;a&&(!a.getAttribute||!(b=a.getAttribute("leid")));)a=a.parentNode;return b}' +
