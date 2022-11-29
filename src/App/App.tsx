@@ -8,16 +8,9 @@ import { buildGraph } from './Graph'
 import Graph from './Graph/Graph'
 import { PlayerControls } from './Graph/Player'
 import { activeNodeStore, graphStore } from './Graph/store/store'
-import {
-  Configuration,
-  Content,
-  GraphButtons,
-  List,
-  Main,
-  Section,
-  SiteHeading,
-  Wrapper,
-} from './style'
+import Preview from './Preview'
+import SiteList from './SiteList'
+import { Configuration, Content, GraphButtons, Main, Section, SiteHeading, Wrapper } from './style'
 
 const isURLValid = (value: string): boolean => {
   return URL_TEST_REGEX.test(value)
@@ -31,23 +24,11 @@ const App: React.FC = () => {
 
   const controlsRef = useRef<PlayerControls>(null)
 
-  const { graph } = useSnapshot(graphStore)
   const { url } = useSnapshot(activeNodeStore)
 
   const searchUrl = useMemo(
     () => `http://google.com/search?${new URLSearchParams({ q: search })}`,
     [search],
-  )
-
-  const graphComponent = useMemo(
-    () => (
-      <Graph
-        baseURL={mode === 'url' ? baseSite ?? '' : searchUrl}
-        maxDepth={parseInt(maxDepth, 10)}
-        controlsRef={controlsRef}
-      />
-    ),
-    [baseSite, maxDepth, mode, searchUrl],
   )
 
   return (
@@ -119,7 +100,6 @@ const App: React.FC = () => {
                 onClick={() => {
                   graphStore.graph = {}
                   buildGraph(mode === 'url' ? baseSite ?? '' : searchUrl, parseInt(maxDepth))
-                  // controlsRef.current?.resetCamera()
                 }}
               >
                 Build Graph
@@ -143,22 +123,12 @@ const App: React.FC = () => {
               </Button>
             </GraphButtons>
 
-            {graphComponent}
+            <Graph controlsRef={controlsRef} />
           </Section>
 
-          <Section>
-            <h3>Indexed Sites ({Object.keys(graph).length}):</h3>
-            <List>
-              {Object.keys(graph)
-                .map(url => url.replace('www.', ''))
-                .sort((a, b) => (a > b ? 1 : -1))
-                .map(url => (
-                  <a key={url} href={url} target="_blank" rel="noreferrer">
-                    {url}
-                  </a>
-                ))}
-            </List>
-          </Section>
+          <Preview />
+
+          <SiteList />
         </Wrapper>
       </Content>
     </Main>

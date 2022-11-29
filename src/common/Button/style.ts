@@ -16,7 +16,8 @@ export const Button = styled.button`
 
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus {
     text-decoration: underline;
   }
 `
