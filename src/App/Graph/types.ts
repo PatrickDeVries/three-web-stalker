@@ -14,3 +14,8 @@ export enum MeshType {
   Connection = 'CONNECTION',
   Text = 'TEXT',
 }
+
+export interface PageData {
+  title: string
+  urls: string[]
+}
