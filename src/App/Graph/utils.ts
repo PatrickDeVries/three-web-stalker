@@ -68,7 +68,7 @@ const buildInnerGraph = async (
   const pageData =
     depth < maxDepth ? await getPageData(baseURL) : { urls: [], title: baseURL.split('?')[0] }
 
-  const urls = pageData.urls.filter(url => url !== baseURL) //.map(url => baseURL + '/' + url)
+  const urls = [...new Set(pageData.urls.filter(url => url !== baseURL))] //.map(url => baseURL + '/' + url)
 
   const parent = graphStore.graph[parentURL]
   const d = Math.max(1, childCount / 2) * Math.max(20 - depth * 5, 1) // line scale factor
@@ -102,7 +102,7 @@ const buildInnerGraph = async (
 export const buildGraph = async (baseURL: string, maxDepth: number) => {
   const pageData = await getPageData(baseURL)
 
-  const urls = pageData.urls.filter(url => url !== baseURL)
+  const urls = [...new Set(pageData.urls.filter(url => url !== baseURL))]
 
   addToGraph({
     [baseURL]: {
