@@ -1,3 +1,4 @@
+import { SphereGeometry } from 'three'
 import { PageData } from './types'
 
 export const URL_MATCH_REGEX = /href=["'](https?:\/\/.*?)["']/g
@@ -7,6 +8,8 @@ export const TITLE_REGEX = /<title>(.*?)<\/ ?title>/g
 export const NODE_RADIUS = 3
 
 export const MOVE_SPEED = 50
+
+export const NODE_GEOMETRY = new SphereGeometry(NODE_RADIUS, 15, 15)
 
 export const PAGE_DATA: PageData = {
   title: 'test - Google Search',

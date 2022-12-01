@@ -17,6 +17,7 @@ import { MeshLine, MeshLineMaterial } from 'three.meshline'
 import { PointerLockControls as PointerLockControlsImpl } from 'three/examples/jsm/controls/PointerLockControls'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 import { MOVE_SPEED } from '../constants'
+import useMaterial from '../MaterialProvider/hooks'
 import { activeNodeStore, graphStore } from '../store'
 import { MeshType } from '../types'
 import { useMovement } from './useMovement'
@@ -29,6 +30,8 @@ export interface PlayerControls {
 
 export const Player = React.forwardRef((_, ref) => {
   const theme = useTheme()
+  const { nodeMaterial, lineMaterial, textMaterial } = useMaterial()
+
   const { camera, gl, raycaster, scene } = useThree()
 
   const cursorControls = useRef<PointerLockControlsImpl>(null)
@@ -122,21 +125,21 @@ export const Player = React.forwardRef((_, ref) => {
           if (child.userData.type === MeshType.Node) {
             const nodeChild = child as Mesh<SphereGeometry, MeshStandardMaterial>
             if (nodeChild.userData.url === clickedURL) {
-              nodeChild.material.color = new Color(theme.color.contrast)
+              nodeChild.material = nodeMaterial.active
             } else if (connectedURLs.has(nodeChild.userData.url)) {
-              nodeChild.material.color = new Color(theme.color.primary80)
+              nodeChild.material = nodeMaterial.inActiveTree
             } else {
-              nodeChild.material.color = new Color(theme.color.primary40)
+              nodeChild.material = nodeMaterial.inactive
             }
           } // handle text selection
           else if (child.userData.type === MeshType.Text) {
             const nodeChild = child as Mesh<TextGeometry, MeshLambertMaterial>
             if (nodeChild.userData.url === clickedURL) {
-              nodeChild.material.color = new Color(theme.color.contrast)
+              nodeChild.material = textMaterial.active
             } else if (connectedURLs.has(nodeChild.userData.url)) {
-              nodeChild.material.color = new Color(theme.color.contrast80)
+              nodeChild.material = textMaterial.inActiveTree
             } else {
-              nodeChild.material.color = new Color(theme.color.contrast40)
+              nodeChild.material = textMaterial.inactive
             }
           }
           // handle connection selection
@@ -147,32 +150,26 @@ export const Player = React.forwardRef((_, ref) => {
               (connectedURLs.has(lineChild.userData.from) &&
                 (connectedURLs.has(lineChild.userData.to) || lineChild.userData.to === clickedURL))
             ) {
-              lineChild.material.color = new Color(theme.color.secondary)
+              lineChild.material = lineMaterial.active
             } else {
-              lineChild.material.color = new Color(theme.color.secondary60)
+              lineChild.material = lineMaterial.inactive
             }
           }
         })
       } else {
         activeNodeStore.url = null
-
         scene.children.forEach(child => {
           // handle node selection
           if (child.userData.type === MeshType.Node) {
-            ;(child as Mesh<SphereGeometry, MeshStandardMaterial>).material.color = new Color(
-              theme.color.primary,
-            )
+            ;(child as Mesh<SphereGeometry, MeshStandardMaterial>).material = nodeMaterial.default
           } // handle text selection
           else if (child.userData.type === MeshType.Text) {
-            ;(child as Mesh<TextGeometry, MeshLambertMaterial>).material.color = new Color(
-              theme.color.contrast,
-            )
+            ;(child as Mesh<TextGeometry, MeshLambertMaterial>).material = textMaterial.default
           }
           // handle connection selection
           else if (child.userData.type === MeshType.Connection) {
-            ;(child as Mesh<typeof MeshLine, typeof MeshLineMaterial>).material.color = new Color(
-              theme.color.secondary,
-            )
+            ;(child as Mesh<typeof MeshLine, typeof MeshLineMaterial>).material =
+              lineMaterial.default
           }
         })
       }
