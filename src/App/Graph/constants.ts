@@ -9,7 +9,7 @@ export const NODE_RADIUS = 3
 
 export const MOVE_SPEED = 50
 
-export const NODE_GEOMETRY = new SphereGeometry(NODE_RADIUS, 15, 15)
+export const NODE_GEOMETRY = new SphereGeometry(NODE_RADIUS, 8, 8)
 
 export const PAGE_DATA: PageData = {
   title: 'test - Google Search',

@@ -7,3 +7,11 @@ export interface GraphStore {
 export interface NodeStore {
   url: string | null
 }
+
+export interface IndexedURLStore {
+  urls: string[]
+}
+
+export interface GraphSignalStore {
+  count: number
+}

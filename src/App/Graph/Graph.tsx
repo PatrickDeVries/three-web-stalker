@@ -1,6 +1,6 @@
 import { Physics } from '@react-three/cannon'
 import { Canvas, extend } from '@react-three/fiber'
-import React, { useMemo, useRef } from 'react'
+import React, { Suspense, useMemo, useRef } from 'react'
 import { PointerLockControls as PointerLockControlsImpl } from 'three/examples/jsm/controls/PointerLockControls'
 import MaterialProvider from './MaterialProvider'
 import Nodes from './Nodes'
@@ -27,10 +27,12 @@ const Graph: React.FC<Props> = ({ controlsRef }) => {
         >
           <ambientLight intensity={0.25} />
           <directionalLight position={[-3, 5, 8]} />
-          <Physics>
-            <Player ref={controlsRef} />
-          </Physics>
-          <Nodes />
+          <Suspense fallback={null}>
+            <Physics>
+              <Player ref={controlsRef} />
+            </Physics>
+            <Nodes />
+          </Suspense>
         </Canvas>
       </MaterialProvider>
     ),

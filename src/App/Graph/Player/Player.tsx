@@ -113,11 +113,13 @@ export const Player = React.forwardRef((_, ref) => {
         const clickedURL = nodes[0].object.userData.url
         activeNodeStore.url = clickedURL
 
-        const connectedURLs = new Set<string>([...graphStore.graph[clickedURL].connections])
-        let parentURL: string | null = graphStore.graph[clickedURL].parent
+        const connectedURLs = new Set<string>([
+          ...(graphStore.graph[clickedURL]?.connections ?? []),
+        ])
+        let parentURL: string | null = graphStore.graph[clickedURL]?.parent ?? null
         while (parentURL !== null) {
           connectedURLs.add(parentURL)
-          parentURL = graphStore.graph[parentURL].parent
+          parentURL = graphStore.graph[parentURL]?.parent ?? null
         }
 
         scene.children.forEach(child => {
@@ -148,7 +150,8 @@ export const Player = React.forwardRef((_, ref) => {
             if (
               lineChild.userData.from === clickedURL ||
               (connectedURLs.has(lineChild.userData.from) &&
-                (connectedURLs.has(lineChild.userData.to) || lineChild.userData.to === clickedURL))
+                (connectedURLs.has(lineChild.userData.to.url) ||
+                  lineChild.userData.to.url === clickedURL))
             ) {
               lineChild.material = lineMaterial.active
             } else {

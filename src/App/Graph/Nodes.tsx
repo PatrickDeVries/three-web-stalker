@@ -1,20 +1,20 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useSnapshot } from 'valtio'
 import Node from './Node'
-import { graphStore } from './store'
+import { graphUpdateSignal, indexedURLStore } from './store'
 
 const Nodes: React.FC = () => {
-  const { graph } = useSnapshot(graphStore)
+  const { count } = useSnapshot(graphUpdateSignal)
 
-  // TODO: pass in connection locations from here so graphStore is not used in the Node
-  // TODO: add nodes to scene dynamically when new, rathe than re-rendering the full list each time one is added
-  return (
-    <>
-      {Object.entries(graph).map(([url, node]) => (
-        <Node key={url} url={url} node={node} />
-      ))}
-    </>
+  const nodes = useMemo(
+    () =>
+      count > 0
+        ? indexedURLStore.urls.map((url, i) => <Node key={`node-${url}-${i}`} url={url} />)
+        : null,
+    [count],
   )
+
+  return <>{nodes}</>
 }
 
 export default Nodes

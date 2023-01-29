@@ -7,7 +7,7 @@ export interface Node {
   parent: string | null
 }
 
-export type Graph = Record<string, Node> // URL to node
+export type Graph = Record<string, Node | undefined> // URL to node
 
 export enum MeshType {
   Node = 'NODE',

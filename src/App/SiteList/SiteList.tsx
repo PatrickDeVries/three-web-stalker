@@ -18,8 +18,8 @@ const SiteList: React.FC = () => {
           {Object.keys(graph)
             .map(url => url.replace('www.', ''))
             .sort((a, b) => (a > b ? 1 : -1))
-            .map(url => (
-              <a key={url} href={url} target="_blank" rel="noreferrer">
+            .map((url, i) => (
+              <a key={`url-${url}-${i}`} href={url} target="_blank" rel="noreferrer">
                 {url}
               </a>
             ))}

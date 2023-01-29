@@ -7,7 +7,7 @@ import Pills from '../common/Pills'
 import { buildGraph } from './Graph'
 import Graph from './Graph/Graph'
 import { PlayerControls } from './Graph/Player'
-import { activeNodeStore, graphStore } from './Graph/store/store'
+import { activeNodeStore, graphStore, graphUpdateSignal } from './Graph/store/store'
 import Preview from './Preview'
 import SiteList from './SiteList'
 import { Configuration, Content, GraphButtons, Main, Section, SiteHeading, Wrapper } from './style'
@@ -99,6 +99,7 @@ const App: React.FC = () => {
               <Button
                 onClick={() => {
                   graphStore.graph = {}
+                  graphUpdateSignal.count = 0
                   buildGraph(mode === 'url' ? baseSite ?? '' : searchUrl, parseInt(maxDepth))
                 }}
               >

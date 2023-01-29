@@ -1,43 +1,26 @@
 import { extend } from '@react-three/fiber'
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import { Mesh, Vector3 } from 'three'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
-import { useSnapshot } from 'valtio'
 import fragment from '../../Fragment Mono_Regular.json'
 import { NODE_GEOMETRY, NODE_RADIUS } from './constants'
 import Line from './Line'
 import useMaterial from './MaterialProvider/hooks'
 import { graphStore } from './store'
-import { MeshType, Node as Node_ } from './types'
+import { MeshType } from './types'
 
 extend({ TextGeometry })
 
 interface Props {
   url: string
-  node: Node_
 }
 
-const Node: React.FC<Props> = ({ url, node }) => {
-  const { graph } = useSnapshot(graphStore)
+const Node: React.FC<Props> = ({ url }) => {
   const { nodeMaterial, lineMaterial, textMaterial } = useMaterial()
   const font = new FontLoader().parse(fragment)
   const label = useRef<Mesh>(null)
   const [labelOffset, setLabelOffset] = useState<number>(0)
-
-  const textGeometry = useMemo(
-    () =>
-      new TextGeometry(node.label, {
-        font,
-        size: 1,
-        height: 0.25,
-        bevelEnabled: true,
-        bevelSize: 0.05,
-        bevelThickness: 0.05,
-      }),
-    [font, node.label],
-  )
-
   useLayoutEffect(() => {
     if (label.current) {
       label.current.geometry.computeBoundingBox()
@@ -47,6 +30,16 @@ const Node: React.FC<Props> = ({ url, node }) => {
       }
     }
   }, [])
+
+  const node = graphStore.graph[url]
+  if (!node) return null
+
+  const connections = [...node.connections]
+    .filter(url => graphStore.graph.hasOwnProperty(url))
+    .map(connection => ({
+      url: connection,
+      node: graphStore.graph[connection],
+    }))
 
   return (
     <>
@@ -60,21 +53,31 @@ const Node: React.FC<Props> = ({ url, node }) => {
         ref={label}
         position={[node.x + labelOffset, node.y + NODE_RADIUS + 0.5, node.z]}
         userData={{ url, connections: node.connections, type: MeshType.Text }}
-        geometry={textGeometry}
         material={textMaterial.default}
-      />
-      {[...node.connections].map(
-        connection =>
-          graph.hasOwnProperty(connection) && (
-            <Line
-              key={connection}
-              start={new Vector3(node.x, node.y, node.z)}
-              end={new Vector3(graph[connection].x, graph[connection].y, graph[connection].z)}
-              material={lineMaterial.default}
-              userData={{ type: MeshType.Connection, from: url, to: connection }}
-            />
-          ),
-      )}
+      >
+        <textGeometry
+          args={[
+            node.label,
+            {
+              font,
+              size: 1,
+              height: 0.25,
+              bevelEnabled: true,
+              bevelSize: 0.05,
+              bevelThickness: 0.05,
+            },
+          ]}
+        />
+      </mesh>
+      {connections.map((connection, i) => (
+        <Line
+          key={`${connection.url}-${url}-${i}`}
+          start={new Vector3(node.x, node.y, node.z)}
+          end={new Vector3(connection.node?.x, connection.node?.y, connection.node?.z)}
+          material={lineMaterial.default}
+          userData={{ type: MeshType.Connection, from: url, to: connection }}
+        />
+      ))}
     </>
   )
 }

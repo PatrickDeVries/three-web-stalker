@@ -1,14 +1,16 @@
 import { TITLE_REGEX, URL_MATCH_REGEX } from './constants'
-import { graphStore } from './store/store'
+import { graphStore, graphUpdateSignal, indexedURLStore } from './store'
 import { Graph, PageData } from './types'
 
-const addToGraph = (newNodes: Graph) =>
-  Object.entries(newNodes).forEach(([key, val]) => (graphStore.graph[key] = val))
+const addToGraph = (newNodes: Graph) => {
+  graphStore.graph = { ...graphStore.graph, ...newNodes }
+  indexedURLStore.urls = [...indexedURLStore.urls, ...Object.keys(newNodes)]
+}
 
-const addToConnections = (nodeKey: string, toAdd: string | string[]) =>
-  typeof toAdd === 'string'
-    ? graphStore.graph[nodeKey].connections.add(toAdd)
-    : toAdd.forEach(url => graphStore.graph[nodeKey].connections.add(url))
+const addToConnections = (nodeKey: string, toAdd: string | string[]) => {
+  if (typeof toAdd === 'string') graphStore.graph[nodeKey]?.connections.add(toAdd)
+  else toAdd.forEach(url => graphStore.graph[nodeKey]?.connections.add(url))
+}
 
 // make a fetch and return the string version of a page
 const getPage = async (url: string): Promise<string> => {
@@ -38,8 +40,7 @@ const getPage = async (url: string): Promise<string> => {
 // get list of links from a url
 const getPageData = async (url: string): Promise<PageData> => {
   try {
-    // return URLS
-    const page = await getPage(url) // PAGE
+    const page = await getPage(url)
 
     const title = [...page.matchAll(TITLE_REGEX)][0][1] || url.split('?')[0]
     const urls = [...page.matchAll(URL_MATCH_REGEX)].map(match => {
@@ -68,9 +69,12 @@ const buildInnerGraph = async (
   const pageData =
     depth < maxDepth ? await getPageData(baseURL) : { urls: [], title: baseURL.split('?')[0] }
 
-  const urls = [...new Set(pageData.urls.filter(url => url !== baseURL))] //.map(url => baseURL + '/' + url)
+  const urls = [...new Set(pageData.urls.filter(url => url !== baseURL))].map(
+    url => baseURL + '/' + url,
+  )
 
-  const parent = graphStore.graph[parentURL]
+  const parent = graphStore.graph[parentURL]!
+
   const d = Math.max(1, childCount / 2) * Math.max(20 - depth * 5, 1) // line scale factor
 
   let angle = childIndex * ((Math.PI * 2) / childCount)
@@ -84,6 +88,8 @@ const buildInnerGraph = async (
       parent: parentURL,
     },
   })
+
+  graphUpdateSignal.count += 1
 
   if (depth < maxDepth) {
     for (let i = 0; i < urls.length; i++) {
@@ -114,6 +120,8 @@ export const buildGraph = async (baseURL: string, maxDepth: number) => {
       parent: null,
     },
   })
+
+  graphUpdateSignal.count += 1
 
   if (maxDepth > 0) {
     for (let i = 0; i < urls.length; i++) {
