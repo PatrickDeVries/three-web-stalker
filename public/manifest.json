@@ -1,7 +1,7 @@
 {
     "update_url": "https://clients2.google.com/service/update2/crx",
     "name": "Three Web Stalker 2",
-    "description": "Browser alternative / web crawler visualizer",
+    "description": "Search engine alternative / 3D web crawler visualizer",
     "version": "0.1.2",
     "manifest_version": 3,
     "background": {
